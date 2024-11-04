@@ -61,7 +61,7 @@ public class MonkeyTypeTestService {
         ResponseEntity<JsonTestResponseList> responseEntity =
                 restTemplate.exchange(getTestsUrl + "?onOrAfterTimestamp=" + afterTimestamp, HttpMethod.GET, entity, JsonTestResponseList.class);
         List<MonkeyTypeTest> tests = responseEntity.getBody().getData();
-        log.info("Received {} tests done since {}", tests.size(), zdt.toString());
+        log.info("Received {} tests done since {}", tests.size(), zdt);
         return tests;
     }
 }
