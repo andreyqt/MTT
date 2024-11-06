@@ -19,6 +19,6 @@ public class DailyResult {
 
     @Override
     public String toString() {
-        return "[averageSpeed = " + averageSpeed + ", averageTime = " + averageTime + ", number of tests = " + numberOfTests + ", date = " + date + "]";
+        return "[averageSpeed = " + averageSpeed + ", averageTime = " + averageTime + " minutes, number of tests = " + numberOfTests + ", date = " + date + "]";
     }
 }
