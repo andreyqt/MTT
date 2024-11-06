@@ -45,7 +45,8 @@ public class MonkeyTypeTestService {
         headers.add("Accept", "application/json");
         HttpEntity<Object> entity = new HttpEntity<>(headers);
         ResponseEntity<JsonTestResponseList> responseEntity =
-                restTemplate.exchange(getTestsUrl + "?limit=" + batchSize, HttpMethod.GET, entity, JsonTestResponseList.class);
+                restTemplate.exchange(getTestsUrl + "?limit=" + batchSize,
+                        HttpMethod.GET, entity, JsonTestResponseList.class);
         return responseEntity.getBody().getData();
     }
 
