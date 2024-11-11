@@ -9,9 +9,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import tutorial.mtt.dto.MonkeyTypeTestDTO;
 import tutorial.mtt.entity.MonkeyTypeTest;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 @ExtendWith(MockitoExtension .class)
@@ -50,11 +47,4 @@ public class MTTMapperTest {
         Assertions.assertEquals(expectedResult, actualResult);
     }
 
-    @Test
-    public void getLongFromLocalDateTime() {
-        LocalDateTime localDateTime = LocalDateTime.of(2024, 11, 3, 0,0);
-        ZonedDateTime zdt = ZonedDateTime.of(localDateTime, ZoneId.systemDefault());
-        long date = zdt.toInstant().toEpochMilli();
-        System.out.println(date);
-    }
 }

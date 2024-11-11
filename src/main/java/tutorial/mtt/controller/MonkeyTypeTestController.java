@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 import tutorial.mtt.dto.DailyResult;
 import tutorial.mtt.dto.MonkeyTypeTestDTO;
 import tutorial.mtt.mapper.MonkeyTypeTestMapper;
-import tutorial.mtt.service.MonkeyTypeTestService;
+import tutorial.mtt.service.MonkeyTypeListRequestSender;
+import tutorial.mtt.service.MonkeyTypeRequestSender;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,31 +17,23 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class MonkeyTypeTestController {
-    private final MonkeyTypeTestService monkeyTypeTestService;
     private final MonkeyTypeTestMapper monkeyTypeTestMapper;
+    private final MonkeyTypeRequestSender monkeyTypeRequestSender;
+    private final MonkeyTypeListRequestSender monkeyTypeListRequestSender;
 
     @GetMapping("/last")
     public MonkeyTypeTestDTO getLastTest() {
-        return monkeyTypeTestMapper.toDto(monkeyTypeTestService.getLastTest().getBody().getData());
-    }
-
-    @GetMapping("/batch")
-    public List<MonkeyTypeTestDTO> getBatchOfTests() {
-        return monkeyTypeTestService.getBatchOfTests().stream().map(monkeyTypeTestMapper::toDto).toList();
+        return monkeyTypeRequestSender.getLastTest();
     }
 
     @GetMapping("/today")
-    public List<MonkeyTypeTestDTO> getTodayTests() {
-        return monkeyTypeTestService.getTodaysTests().stream().map(monkeyTypeTestMapper::toDto).toList();
+    public List<MonkeyTypeTestDTO> getTestsDoneToday() {
+        return monkeyTypeListRequestSender.getTestsDoneToday();
     }
 
     @GetMapping("/today/average")
     public String getTodaysAverage() {
-        List<MonkeyTypeTestDTO> result = getTodayTests().stream().filter(test -> test.getMode().equals("quote")).toList();
-        double avgSpeed = result.stream().mapToDouble(MonkeyTypeTestDTO::getWpm).average().getAsDouble();
-        double avgTime = result.stream().mapToDouble(test->Double.parseDouble(test.getTestDuration())).sum()/60.;
-        LocalDate date = result.stream().findFirst().map(test -> test.getDateTime().toLocalDate()).orElse(LocalDate.now());
-        int numberOfTests = result.size();
-        return new DailyResult(avgSpeed, avgTime, numberOfTests, date).toString();
+        return monkeyTypeListRequestSender.getTodaysAverage().toString();
     }
+
 }
