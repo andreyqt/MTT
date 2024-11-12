@@ -27,10 +27,10 @@ public class TimeServiceTest {
 
     @BeforeEach
     public void setUp() {
-        localDateTime1 = LocalDateTime.of(2024,11,12, 11,29, 1);
-        localDateTime2 = LocalDateTime.of(2023, 11, 12, 0, 0,0);
-        localDate1 = LocalDate.of(2024,11,12);
-        localDate2 = LocalDate.of(2023,11,12);
+        localDateTime1 = LocalDateTime.of(2024, 11, 12, 11, 29, 1);
+        localDateTime2 = LocalDateTime.of(2023, 11, 12, 0, 0, 0);
+        localDate1 = LocalDate.of(2024, 11, 12);
+        localDate2 = LocalDate.of(2023, 11, 12);
         dateTime1 = "2024-11-12 11:29:01";
         dateTime2 = "2023-11-12 00:00:00";
         timestamp1 = 1731400141000L;

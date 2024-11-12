@@ -14,6 +14,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface MonkeyTypeTestMapper {
+
     @Mapping(source = "charStats", target = "chars", qualifiedByName = "mapCharStatsToChars")
     @Mapping(source = "timestamp", target = "dateTime", qualifiedByName = "mapTimestampToLocalDateTime")
     MonkeyTypeTestDTO toDto(MonkeyTypeTest monkeyTypeTest);
