@@ -29,8 +29,7 @@ public class MonkeyTypeListRequestSender extends AbstractRequestSender<JsonTestR
 
     public List<MonkeyTypeTestDTO> getTestsDoneToday() {
         long afterTimestamp = timeService.getMidnightTimestamp();
-        List<MonkeyTypeTest> tests = sendRequest(getTestsUrl + "?onOrAfterTimestamp=" + afterTimestamp,
-                HttpMethod.GET).getData();
+        List<MonkeyTypeTest> tests = sendRequest(createUrl(afterTimestamp), HttpMethod.GET).getData();
         log.info("Received {} test(s) done today", tests.size());
         return tests.stream().map(monkeyTypeTestMapper::toDto).toList();
     }
@@ -42,8 +41,7 @@ public class MonkeyTypeListRequestSender extends AbstractRequestSender<JsonTestR
 
     public List<MonkeyTypeTestDTO> getTestsDoneYesterday() {
         long afterTimestamp = timeService.getMidnightOfTheDay(LocalDate.now().minusDays(1));
-        List<MonkeyTypeTest> tests = sendRequest(getTestsUrl + "?onOrAfterTimestamp=" + afterTimestamp,
-                HttpMethod.GET).getData();
+        List<MonkeyTypeTest> tests = sendRequest(createUrl(afterTimestamp), HttpMethod.GET).getData();
         log.info("Received {} test(s) done since yesterday", tests.size());
         List<MonkeyTypeTestDTO> results = tests.stream().map(monkeyTypeTestMapper::toDto)
                 .filter(dto -> dto.getDateTime().toLocalDate().isBefore(LocalDate.now())).toList();
@@ -56,12 +54,26 @@ public class MonkeyTypeListRequestSender extends AbstractRequestSender<JsonTestR
         return calculateAverage(result, LocalDate.now().minusDays(1));
     }
 
+    public DailyResult getAverageForDate(LocalDate date) {
+        long timestamp = timeService.getMidnightOfTheDay(date);
+        List<MonkeyTypeTest> tests = sendRequest(createUrl(timestamp), HttpMethod.GET).getData();
+        List<MonkeyTypeTestDTO> filteredTests = tests.stream()
+                .filter(monkeyTypeTest -> monkeyTypeTest.getTimestamp() < timestamp + 86000000L)
+                .map(monkeyTypeTestMapper::toDto).toList();
+        log.info("Received {} test(s) for date {}", filteredTests.size(), date);
+        return calculateAverage(filteredTests, date);
+    }
+
     public DailyResult calculateAverage(List<MonkeyTypeTestDTO> tests, LocalDate date) {
         List<MonkeyTypeTestDTO> filteredTests = tests.stream().filter(test -> test.getMode().equals("quote")).toList();
         int numberOfTests = filteredTests.size();
         OptionalDouble optionalDouble = filteredTests.stream().mapToDouble(MonkeyTypeTestDTO::getWpm).average();
         double avgSpeed = optionalDouble.isPresent() ? optionalDouble.getAsDouble() : 0;
-        double avgTime = filteredTests.stream().mapToDouble(MonkeyTypeTestDTO::getTestDuration).sum()/60.;
+        double avgTime = filteredTests.stream().mapToDouble(MonkeyTypeTestDTO::getTestDuration).sum() / 60.;
         return new DailyResult(avgSpeed, avgTime, numberOfTests, date);
+    }
+
+    public String createUrl(long afterTimestamp) {
+        return getTestsUrl + "?onOrAfterTimestamp=" + afterTimestamp;
     }
 }
