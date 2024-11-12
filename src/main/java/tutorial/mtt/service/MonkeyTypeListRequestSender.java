@@ -51,11 +51,17 @@ public class MonkeyTypeListRequestSender extends AbstractRequestSender<JsonTestR
         return results;
     }
 
+    public DailyResult getYesterdaysAverage() {
+        List<MonkeyTypeTestDTO> result = getTestsDoneYesterday();
+        return calculateAverage(result, LocalDate.now().minusDays(1));
+    }
+
     public DailyResult calculateAverage(List<MonkeyTypeTestDTO> tests, LocalDate date) {
-        int numberOfTests = tests.size();
-        OptionalDouble optionalDouble = tests.stream().mapToDouble(MonkeyTypeTestDTO::getWpm).average();
+        List<MonkeyTypeTestDTO> filteredTests = tests.stream().filter(test -> test.getMode().equals("quote")).toList();
+        int numberOfTests = filteredTests.size();
+        OptionalDouble optionalDouble = filteredTests.stream().mapToDouble(MonkeyTypeTestDTO::getWpm).average();
         double avgSpeed = optionalDouble.isPresent() ? optionalDouble.getAsDouble() : 0;
-        double avgTime = tests.stream().mapToDouble(MonkeyTypeTestDTO::getTestDuration).sum()/60.;
+        double avgTime = filteredTests.stream().mapToDouble(MonkeyTypeTestDTO::getTestDuration).sum()/60.;
         return new DailyResult(avgSpeed, avgTime, numberOfTests, date);
     }
 }
