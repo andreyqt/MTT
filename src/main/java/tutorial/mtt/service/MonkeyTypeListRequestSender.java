@@ -11,7 +11,6 @@ import tutorial.mtt.entity.MonkeyTypeTest;
 import tutorial.mtt.mapper.MonkeyTypeTestMapper;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.OptionalDouble;
 
@@ -38,11 +37,25 @@ public class MonkeyTypeListRequestSender extends AbstractRequestSender<JsonTestR
 
     public DailyResult getTodaysAverage() {
         List<MonkeyTypeTestDTO> result = getTestsDoneToday();
-        int numberOfTests = result.size();
-        OptionalDouble optionalDouble = result.stream().mapToDouble(MonkeyTypeTestDTO::getWpm).average();
+        return calculateAverage(result, LocalDate.now());
+    }
+
+    public List<MonkeyTypeTestDTO> getTestsDoneYesterday() {
+        long afterTimestamp = timeService.getMidnightOfTheDay(LocalDate.now().minusDays(1));
+        List<MonkeyTypeTest> tests = sendRequest(getTestsUrl + "?onOrAfterTimestamp=" + afterTimestamp,
+                HttpMethod.GET).getData();
+        log.info("Received {} test(s) done since yesterday", tests.size());
+        List<MonkeyTypeTestDTO> results = tests.stream().map(monkeyTypeTestMapper::toDto)
+                .filter(dto -> dto.getDateTime().toLocalDate().isBefore(LocalDate.now())).toList();
+        log.info("{} test(s) were(was) done yesterday", results.size());
+        return results;
+    }
+
+    public DailyResult calculateAverage(List<MonkeyTypeTestDTO> tests, LocalDate date) {
+        int numberOfTests = tests.size();
+        OptionalDouble optionalDouble = tests.stream().mapToDouble(MonkeyTypeTestDTO::getWpm).average();
         double avgSpeed = optionalDouble.isPresent() ? optionalDouble.getAsDouble() : 0;
-        double avgTime = result.stream().mapToDouble(MonkeyTypeTestDTO::getTestDuration).sum()/60.;
-        LocalDate date = LocalDateTime.now().toLocalDate();
+        double avgTime = tests.stream().mapToDouble(MonkeyTypeTestDTO::getTestDuration).sum()/60.;
         return new DailyResult(avgSpeed, avgTime, numberOfTests, date);
     }
 }

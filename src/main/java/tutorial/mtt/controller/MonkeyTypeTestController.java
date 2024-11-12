@@ -36,4 +36,8 @@ public class MonkeyTypeTestController {
         return monkeyTypeListRequestSender.getTodaysAverage().toString();
     }
 
+    @GetMapping("yesterday")
+    public List<MonkeyTypeTestDTO> getTestsDoneYesterday() {
+        return monkeyTypeListRequestSender.getTestsDoneYesterday();
+    }
 }
