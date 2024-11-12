@@ -30,7 +30,7 @@ public class MonkeyTypeListRequestSender extends AbstractRequestSender<JsonTestR
         long afterTimestamp = timeService.getMidnightTimestamp();
         List<MonkeyTypeTest> tests = sendRequest(getTestsUrl + "?onOrAfterTimestamp=" + afterTimestamp,
                 HttpMethod.GET).getData();
-        log.info("Received {} tests done today", tests.size());
+        log.info("Received {} test(s) done today", tests.size());
         return tests.stream().map(monkeyTypeTestMapper::toDto).toList();
     }
 
