@@ -18,5 +18,5 @@ public class MonkeyTypeTestDTO {
     private String mode2;
     private String chars;
     private LocalDateTime dateTime;
-    private String testDuration;
+    private double testDuration;
 }

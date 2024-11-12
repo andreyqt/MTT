@@ -19,7 +19,7 @@ public class MTTMapperTest {
     private MonkeyTypeTest monkeyTypeTest;
     private LocalDateTime localDateTime;
     private List<String> charStats;
-    private String duration;
+    private double duration;
     private String mode;
     private String mode2;
     private Long timestamp;
@@ -31,7 +31,7 @@ public class MTTMapperTest {
         mapper = new MonkeyTypeTestMapperImpl();
         charStats = List.of("50", "0", "0", "0");
         timestamp = 1700010123000L;
-        duration = "5.5";
+        duration = 5.5;
         mode = "quote";
         mode2 = "long";
         wpm = 100;

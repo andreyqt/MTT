@@ -11,7 +11,9 @@ import tutorial.mtt.entity.MonkeyTypeTest;
 import tutorial.mtt.mapper.MonkeyTypeTestMapper;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.OptionalDouble;
 
 @Slf4j
 @Service
@@ -37,10 +39,10 @@ public class MonkeyTypeListRequestSender extends AbstractRequestSender<JsonTestR
     public DailyResult getTodaysAverage() {
         List<MonkeyTypeTestDTO> result = getTestsDoneToday();
         int numberOfTests = result.size();
-        double avgSpeed = result.stream().mapToDouble(MonkeyTypeTestDTO::getWpm).average().getAsDouble();
-        double avgTime = result.stream().mapToDouble(test->Double.parseDouble(test.getTestDuration())).sum()/60.;
-        LocalDate date = result.stream().findFirst().
-                map(test -> test.getDateTime().toLocalDate()).orElse(LocalDate.now());
+        OptionalDouble optionalDouble = result.stream().mapToDouble(MonkeyTypeTestDTO::getWpm).average();
+        double avgSpeed = optionalDouble.isPresent() ? optionalDouble.getAsDouble() : 0;
+        double avgTime = result.stream().mapToDouble(MonkeyTypeTestDTO::getTestDuration).sum()/60.;
+        LocalDate date = LocalDateTime.now().toLocalDate();
         return new DailyResult(avgSpeed, avgTime, numberOfTests, date);
     }
 }

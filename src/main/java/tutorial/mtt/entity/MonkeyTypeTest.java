@@ -20,5 +20,5 @@ public class MonkeyTypeTest {
     private String mode2;
     private List<String> charStats;
     private Long timestamp;
-    private String testDuration;
+    private double testDuration;
 }
