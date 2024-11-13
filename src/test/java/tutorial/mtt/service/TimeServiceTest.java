@@ -69,4 +69,10 @@ public class TimeServiceTest {
         Assertions.assertEquals(localDateTime2, actualResult2);
     }
 
+    @Test
+    public void testLongValue() {
+        long timestamp = 1731447614000L;
+        System.out.println(timeService.ConvertLongToLocalDateTime(timestamp));
+    }
+
 }

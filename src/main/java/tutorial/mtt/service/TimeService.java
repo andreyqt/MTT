@@ -16,7 +16,7 @@ public class TimeService {
     private static final ZoneId ZONE_ID_MOSCOW = ZoneId.of("Europe/Moscow");
 
     public long getMidnightTimestamp() {
-        LocalDate today = LocalDate.now(ZONE_ID_MOSCOW);
+        LocalDate today = LocalDate.now();
         ZonedDateTime zdt = today.atStartOfDay(ZONE_ID_MOSCOW);
         return zdt.toInstant().toEpochMilli();
     }
