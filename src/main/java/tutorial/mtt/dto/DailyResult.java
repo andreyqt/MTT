@@ -13,12 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class DailyResult {
     private double averageSpeed;
-    private double averageTime;
+    private double totalTime;
     private int numberOfTests;
     private LocalDate date;
-
-    @Override
-    public String toString() {
-        return "[averageSpeed = " + averageSpeed + ", averageTime = " + averageTime + " minutes, number of tests = " + numberOfTests + ", date = " + date + "]";
-    }
 }

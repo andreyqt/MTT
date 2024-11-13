@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import tutorial.mtt.dto.DailyResult;
 import tutorial.mtt.dto.MonkeyTypeTestDTO;
 import tutorial.mtt.service.MonkeyTypeListRequestSender;
 import tutorial.mtt.service.MonkeyTypeRequestSender;
@@ -31,8 +32,8 @@ public class MonkeyTypeTestController {
     }
 
     @GetMapping("/today/average")
-    public String getTodaysAverage() {
-        return monkeyTypeListRequestSender.getTodaysAverage().toString();
+    public DailyResult getTodaysAverage() {
+        return monkeyTypeListRequestSender.getTodaysAverage();
     }
 
     @GetMapping("/yesterday")
@@ -41,12 +42,12 @@ public class MonkeyTypeTestController {
     }
 
     @GetMapping("/yesterday/average")
-    public String getYesterdaysAverage() {
-        return monkeyTypeListRequestSender.getYesterdaysAverage().toString();
+    public DailyResult getYesterdaysAverage() {
+        return monkeyTypeListRequestSender.getYesterdaysAverage();
     }
 
     @GetMapping(value = "/date", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String getAverageForDate(@RequestBody String date) {
-        return monkeyTypeListRequestSender.getAverageForDate(LocalDate.parse(date)).toString();
+    public DailyResult getAverageForDate(@RequestBody String date) {
+        return monkeyTypeListRequestSender.getAverageForDate(LocalDate.parse(date));
     }
 }
