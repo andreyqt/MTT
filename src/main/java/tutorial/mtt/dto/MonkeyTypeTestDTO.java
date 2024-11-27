@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class MonkeyTypeTestDTO {
     private double wpm;
-    private int acc;
+    private double acc;
     private String mode;
     private String mode2;
-    private String chars;
+    private int chars;
     private LocalDateTime dateTime;
     private double testDuration;
 }

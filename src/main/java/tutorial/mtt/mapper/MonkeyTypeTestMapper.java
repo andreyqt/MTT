@@ -20,7 +20,7 @@ public interface MonkeyTypeTestMapper {
     MonkeyTypeTestDTO toDto(MonkeyTypeTest monkeyTypeTest);
 
     @Named("mapCharStatsToChars")
-    default String mapCharStatsToChars(List<String> charStats) {
+    default Integer mapCharStatsToChars(List<Integer> charStats) {
         if (charStats == null || charStats.isEmpty()) {
             return null;
         }

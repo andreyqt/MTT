@@ -15,10 +15,10 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MonkeyTypeTest {
     private double wpm;
-    private int acc;
+    private double acc;
     private String mode;
     private String mode2;
-    private List<String> charStats;
+    private List<Integer> charStats;
     private Long timestamp;
     private double testDuration;
 }
