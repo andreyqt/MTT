@@ -9,10 +9,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import tutorial.mtt.entity.MonkeyTypeTest;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -27,35 +28,26 @@ public class MTTExcelService extends AbstractExcelService<MonkeyTypeTest> {
         this.timeService = timeService;
     }
 
-    public void addTest(MonkeyTypeTest test) throws IOException {
-        Workbook wb = getWorkbookFromFile();
-        Sheet sheet;
-        int rowIndex = 0;
-        String date = LocalDateTime.now().toLocalDate().toString();
-        if (wb.getSheet(date) == null) {
-            sheet = wb.createSheet(date);
-            createHeader(sheet);
-            Row row = sheet.createRow(1);
-            writeToRow(row, test);
-            writeWorkbookToFile(wb);
-        } else {
-            sheet = wb.getSheet(date);
-            Iterator<Row> rowIterator = sheet.iterator();
-            while (rowIterator.hasNext()) {
-                rowIterator.next();
-                rowIndex++;
-            }
-            Row row = sheet.createRow(rowIndex);
-            writeToRow(row, test);
-            writeWorkbookToFile(wb);
-        }
+    public void addTestToFile(MonkeyTypeTest test, String path, String sheetName) throws IOException {
+        FileInputStream fis = new FileInputStream(path);
+        Workbook wb = new XSSFWorkbook(fis);
+        fis.close();
+        Sheet sheet = wb.getSheet(sheetName);
+        int lastRowNum = sheet.getLastRowNum();
+        Row row = sheet.createRow(lastRowNum + 1);
+        writeToRow(row, test);
+        FileOutputStream fos = new FileOutputStream(path);
+        wb.write(fos);
+        fos.close();
     }
 
-    public MonkeyTypeTest getTest(int rowIndex) throws IOException {
-        Workbook wb = getWorkbookFromFile();
-        String date = LocalDateTime.now().toLocalDate().toString();
-        Sheet sheet = wb.getSheet(date);
-        Row row = sheet.getRow(1);
+    public MonkeyTypeTest getTestFromFile(String path, String sheetName, int rowNum) throws IOException {
+        FileInputStream fis = new FileInputStream(path);
+        Workbook wb = new XSSFWorkbook(fis);
+        fis.close();
+        MonkeyTypeTest test = new MonkeyTypeTest();
+        Sheet sheet = wb.getSheet(sheetName);
+        Row row = sheet.getRow(rowNum);
         return readFromRow(row);
     }
 

@@ -21,20 +21,23 @@ public class MonkeyTypeListRequestSender extends AbstractRequestSender<JsonTestR
     @Value("${MT.getTests.url}")
     private String getTestsUrl;
     private final TimeService timeService;
+    private final MonkeyTypeTestCache monkeyTypeTestCache;
 
     public MonkeyTypeListRequestSender(MonkeyTypeTestMapper monkeyTypeTestMapper) {
         super(JsonTestResponseList.class, monkeyTypeTestMapper);
         this.timeService = new TimeService();
+        this.monkeyTypeTestCache = new MonkeyTypeTestCache();
     }
 
     public List<MonkeyTypeTestDTO> getTestsDoneToday() {
         long afterTimestamp = timeService.getMidnightTimestamp();
         List<MonkeyTypeTest> tests = sendRequest(createUrl(afterTimestamp), HttpMethod.GET).getData();
         log.info("Received {} test(s) done today", tests.size());
+        monkeyTypeTestCache.addListToCache(filterToQuotes(tests));
         return tests.stream().map(monkeyTypeTestMapper::toDto).toList();
     }
 
-    public DailyResult getTodaysAverage() {
+    public DailyResult getTodayAverage() {
         List<MonkeyTypeTestDTO> result = getTestsDoneToday();
         return calculateAverage(result, LocalDate.now());
     }
@@ -75,5 +78,9 @@ public class MonkeyTypeListRequestSender extends AbstractRequestSender<JsonTestR
 
     public String createUrl(long afterTimestamp) {
         return getTestsUrl + "?onOrAfterTimestamp=" + afterTimestamp;
+    }
+
+    public List<MonkeyTypeTest> filterToQuotes(List<MonkeyTypeTest> tests) {
+        return tests.stream().filter(test -> test.getMode().equals("quote")).toList();
     }
 }

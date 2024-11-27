@@ -24,18 +24,22 @@ public abstract class AbstractExcelService<T> {
         int rowIndex = 0;
         if (!ifSheetExists(wb)) {
             sheet = createSheetAndHeader(wb, getSheetName());
-            rowIndex ++;
+            rowIndex++;
             for (T t : tList) {
                 Row row = sheet.createRow(rowIndex);
                 writeToRow(row, t);
-                rowIndex ++;
+                rowIndex++;
             }
             writeWorkbookToFile(wb);
         } else {
             sheet = wb.getSheet(getSheetName());
-
+            rowIndex = sheet.getLastRowNum() + 1;
+            for (int i = rowIndex - 1; i <= tList.size(); i++) {
+                Row row = sheet.createRow(rowIndex);
+                writeToRow(row, tList.get(i));
+            }
+            writeWorkbookToFile(wb);
         }
-
     }
 
     protected Workbook getWorkbookFromFile() throws IOException {
@@ -58,8 +62,12 @@ public abstract class AbstractExcelService<T> {
     }
 
     protected abstract Sheet createSheetAndHeader(Workbook workbook, String name);
+
     protected abstract boolean ifSheetExists(Workbook workbook);
+
     protected abstract void writeToRow(Row row, T t);
+
     protected abstract T readFromRow(Row row);
+
     protected abstract String getSheetName();
 }

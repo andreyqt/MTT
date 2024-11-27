@@ -18,6 +18,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class MonkeyTypeTestController {
+
     private final MonkeyTypeRequestSender monkeyTypeRequestSender;
     private final MonkeyTypeListRequestSender monkeyTypeListRequestSender;
 
@@ -33,7 +34,7 @@ public class MonkeyTypeTestController {
 
     @GetMapping("/today/average")
     public DailyResult getTodaysAverage() {
-        return monkeyTypeListRequestSender.getTodaysAverage();
+        return monkeyTypeListRequestSender.getTodayAverage();
     }
 
     @GetMapping("/yesterday")
@@ -50,4 +51,5 @@ public class MonkeyTypeTestController {
     public DailyResult getAverageForDate(@RequestBody String date) {
         return monkeyTypeListRequestSender.getAverageForDate(LocalDate.parse(date));
     }
+
 }

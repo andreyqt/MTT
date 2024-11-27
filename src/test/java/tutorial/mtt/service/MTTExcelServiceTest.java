@@ -15,16 +15,18 @@ public class MTTExcelServiceTest {
 
     private MTTExcelService excelService;
     private MonkeyTypeTest test;
+    private String path;
+    private String sheetName;
 
     @BeforeEach
     public void setUp() {
-        String testPath = "C:\\Users\\User\\Documents\\MTT\\mockito.xlsx";
+        path = "C:\\Users\\User\\Documents\\MTT\\mockito.xlsx";
+        sheetName = "test";
         TimeService timeService = new TimeService();
         excelService = new MTTExcelService(timeService);
-        excelService.setPath(testPath);
         test = MonkeyTypeTest.builder()
-                .wpm(100)
-                .acc(95)
+                .wpm(100.91)
+                .acc(95.83)
                 .mode("quote")
                 .mode2("1400")
                 .charStats(List.of(100))
@@ -34,13 +36,13 @@ public class MTTExcelServiceTest {
     }
 
     @Test
-    public void testAddTest() throws IOException {
-        excelService.addTest(test);
+    public void testAddTestToFile() throws IOException {
+        excelService.addTestToFile(test, path, sheetName);
     }
 
     @Test
-    public void testGetTest() throws IOException {
-        MonkeyTypeTest actualResult = excelService.getTest(1);
+    public void testGetTestFromFile() throws IOException {
+        MonkeyTypeTest actualResult = excelService.getTestFromFile(path, sheetName, 0);
         Assertions.assertEquals(test.getWpm(), actualResult.getWpm());
         Assertions.assertEquals(test.getAcc(), actualResult.getAcc());
         Assertions.assertEquals(test.getMode(), actualResult.getMode());

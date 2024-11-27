@@ -13,9 +13,12 @@ public class MonkeyTypeRequestSender extends AbstractRequestSender<JsonTestRespo
 
     @Value("${MT.getLastTest.url}")
     private String getLastTestUrl;
+    private final MTTExcelService excelService;
 
-    public MonkeyTypeRequestSender(MonkeyTypeTestMapper monkeyTypeTestMapper) {
+    public MonkeyTypeRequestSender(MonkeyTypeTestMapper monkeyTypeTestMapper,
+                                   MTTExcelService excelService) {
         super(JsonTestResponse.class, monkeyTypeTestMapper);
+        this.excelService = excelService;
     }
 
     public MonkeyTypeTestDTO getLastTest() {
