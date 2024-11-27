@@ -1,6 +1,7 @@
 package tutorial.mtt.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
@@ -13,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 public abstract class AbstractExcelService<T> {
 
@@ -30,14 +32,16 @@ public abstract class AbstractExcelService<T> {
                 writeToRow(row, t);
                 rowIndex++;
             }
+            log.info("New sheet was created and {} tests were added", tList.size());
             writeWorkbookToFile(wb);
         } else {
             sheet = wb.getSheet(getSheetName());
             rowIndex = sheet.getLastRowNum() + 1;
-            for (int i = rowIndex - 1; i <= tList.size(); i++) {
+            for (int i = rowIndex - 1; i < tList.size(); i++) {
                 Row row = sheet.createRow(rowIndex);
                 writeToRow(row, tList.get(i));
             }
+            log.info("tests were added to sheet {}", getSheetName());
             writeWorkbookToFile(wb);
         }
     }

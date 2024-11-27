@@ -22,7 +22,7 @@ public class MonkeyTypeTestCache {
         for (MonkeyTypeTest monkeyTypeTest : monkeyTypeTestList) {
             addToCache(monkeyTypeTest);
         }
-        log.info("{} was added to Cache, current size is {}", CACHE.size() - monkeyTypeTestList.size(), CACHE.size());
+        log.info("tests were added to Cache, current size is {}", CACHE.size());
     }
 
     public MonkeyTypeTest getFromCacheByTimestamp(long timestamp) {
