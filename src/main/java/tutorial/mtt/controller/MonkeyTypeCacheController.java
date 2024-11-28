@@ -30,6 +30,11 @@ public class MonkeyTypeCacheController {
         return monkeyTypeTestCache.getLastTest();
     }
 
+    @GetMapping("/all")
+    public List<MonkeyTypeTest> getAllTest() {
+        return monkeyTypeTestCache.getAllFromCache();
+    }
+
     @PostMapping()
     public String saveTestsFromCacheToExcel() throws IOException {
         List<MonkeyTypeTest> tests = monkeyTypeTestCache.getAllFromCache();
