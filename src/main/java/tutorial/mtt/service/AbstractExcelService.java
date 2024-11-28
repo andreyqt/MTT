@@ -32,8 +32,8 @@ public abstract class AbstractExcelService<T> {
                 writeToRow(row, t);
                 rowIndex++;
             }
-            log.info("New sheet was created and {} tests were added", tList.size());
             writeWorkbookToFile(wb);
+            log.info("New sheet was created and {} tests were added", tList.size());
         } else {
             sheet = wb.getSheet(getSheetName());
             rowIndex = sheet.getLastRowNum() + 1;
@@ -41,8 +41,8 @@ public abstract class AbstractExcelService<T> {
                 Row row = sheet.createRow(rowIndex);
                 writeToRow(row, tList.get(i));
             }
-            log.info("tests were added to sheet {}", getSheetName());
             writeWorkbookToFile(wb);
+            log.info("tests were added to sheet {}", getSheetName());
         }
     }
 
@@ -57,6 +57,7 @@ public abstract class AbstractExcelService<T> {
         FileOutputStream fos = new FileOutputStream(path);
         wb.write(fos);
         wb.close();
+        fos.close();
     }
 
     protected void alignToCenter(Row row) {
