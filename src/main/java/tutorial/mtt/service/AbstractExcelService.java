@@ -63,7 +63,9 @@ public abstract class AbstractExcelService<T> {
     protected void alignToCenter(Row row) {
         CellStyle style = row.getSheet().getWorkbook().createCellStyle();
         style.setAlignment(HorizontalAlignment.CENTER);
-        row.setRowStyle(style);
+        row.cellIterator().forEachRemaining(cell -> {
+            cell.setCellStyle(style);
+        });
     }
 
     protected abstract Sheet createSheetAndHeader(Workbook workbook, String name);
