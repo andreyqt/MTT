@@ -24,7 +24,7 @@ public abstract class AbstractExcelService<T> {
         Workbook wb = getWorkbookFromFile();
         Sheet sheet;
         int rowIndex = 0;
-        if (!ifSheetExists(wb)) {
+        if (ifSheetDoesNotExist(wb)) {
             sheet = createSheetAndHeader(wb, getSheetName());
             rowIndex++;
             for (T t : tList) {
@@ -42,8 +42,49 @@ public abstract class AbstractExcelService<T> {
                 writeToRow(row, tList.get(i));
             }
             writeWorkbookToFile(wb);
-            log.info("tests were added to sheet {}", getSheetName());
+            log.info("Test(s) was(were) added to sheet {}", getSheetName());
         }
+    }
+
+    public void save(T t) throws IOException {
+        Workbook wb = getWorkbookFromFile();
+        Sheet sheet;
+        if (ifSheetDoesNotExist(wb)) {
+            sheet = createSheetAndHeader(wb, getSheetName());
+            Row row = sheet.createRow(1);
+            writeToRow(row, t);
+            writeWorkbookToFile(wb);
+            log.info("New sheet was created and daily result added");
+        } else {
+            sheet = wb.getSheet(getSheetName());
+            int rowIndex = sheet.getLastRowNum();
+            Row row = sheet.createRow(rowIndex + 1);
+            writeToRow(row, t);
+            writeWorkbookToFile(wb);
+            log.error("Daily result was added to sheet {}", getSheetName());
+        }
+    }
+
+    public void addToFile(T t, String path, String sheetName) throws IOException {
+        FileInputStream fis = new FileInputStream(path);
+        Workbook workbook = new XSSFWorkbook(fis);
+        fis.close();
+        Sheet sheet = workbook.getSheet(sheetName);
+        int lastRowNum = sheet.getLastRowNum();
+        Row row = sheet.createRow(lastRowNum + 1);
+        writeToRow(row, t);
+        FileOutputStream fos = new FileOutputStream(path);
+        workbook.write(fos);
+        fos.close();
+    }
+
+    public T readFromFile(String path, String sheetName, int rowNum) throws IOException {
+        FileInputStream fis = new FileInputStream(path);
+        Workbook wb = new XSSFWorkbook(fis);
+        fis.close();
+        Sheet sheet = wb.getSheet(sheetName);
+        Row row = sheet.getRow(rowNum);
+        return readFromRow(row);
     }
 
     protected Workbook getWorkbookFromFile() throws IOException {
@@ -68,7 +109,7 @@ public abstract class AbstractExcelService<T> {
 
     protected abstract Sheet createSheetAndHeader(Workbook workbook, String name);
 
-    protected abstract boolean ifSheetExists(Workbook workbook);
+    protected abstract boolean ifSheetDoesNotExist(Workbook workbook);
 
     protected abstract void writeToRow(Row row, T t);
 

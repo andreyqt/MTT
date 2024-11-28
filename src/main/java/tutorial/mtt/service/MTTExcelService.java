@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import tutorial.mtt.entity.MonkeyTypeTest;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -26,29 +25,6 @@ public class MTTExcelService extends AbstractExcelService<MonkeyTypeTest> {
     public MTTExcelService(TimeService timeService) {
         super(path);
         this.timeService = timeService;
-    }
-
-    public void addTestToFile(MonkeyTypeTest test, String path, String sheetName) throws IOException {
-        FileInputStream fis = new FileInputStream(path);
-        Workbook wb = new XSSFWorkbook(fis);
-        fis.close();
-        Sheet sheet = wb.getSheet(sheetName);
-        int lastRowNum = sheet.getLastRowNum();
-        Row row = sheet.createRow(lastRowNum + 1);
-        writeToRow(row, test);
-        FileOutputStream fos = new FileOutputStream(path);
-        wb.write(fos);
-        fos.close();
-    }
-
-    public MonkeyTypeTest getTestFromFile(String path, String sheetName, int rowNum) throws IOException {
-        FileInputStream fis = new FileInputStream(path);
-        Workbook wb = new XSSFWorkbook(fis);
-        fis.close();
-        MonkeyTypeTest test = new MonkeyTypeTest();
-        Sheet sheet = wb.getSheet(sheetName);
-        Row row = sheet.getRow(rowNum);
-        return readFromRow(row);
     }
 
     @Override
@@ -95,9 +71,9 @@ public class MTTExcelService extends AbstractExcelService<MonkeyTypeTest> {
     }
 
     @Override
-    public boolean ifSheetExists(Workbook workbook) {
+    public boolean ifSheetDoesNotExist(Workbook workbook) {
         String date = LocalDateTime.now().toLocalDate().toString();
-        return workbook.getSheet(date) != null;
+        return workbook.getSheet(date) == null;
     }
 
     public void createHeader(Sheet sheet) {

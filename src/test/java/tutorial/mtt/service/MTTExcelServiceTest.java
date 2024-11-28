@@ -36,13 +36,13 @@ public class MTTExcelServiceTest {
     }
 
     @Test
-    public void testAddTestToFile() throws IOException {
-        excelService.addTestToFile(test, path, sheetName);
+    public void testAddToFile() throws IOException {
+        excelService.addToFile(test, path, sheetName);
     }
 
     @Test
-    public void testGetTestFromFile() throws IOException {
-        MonkeyTypeTest actualResult = excelService.getTestFromFile(path, sheetName, 0);
+    public void testReadFromFile() throws IOException {
+        MonkeyTypeTest actualResult = excelService.readFromFile(path, sheetName, 0);
         Assertions.assertEquals(test.getWpm(), actualResult.getWpm());
         Assertions.assertEquals(test.getAcc(), actualResult.getAcc());
         Assertions.assertEquals(test.getMode(), actualResult.getMode());
