@@ -26,7 +26,7 @@ public class MonkeyTypeListRequestSender extends AbstractRequestSender<JsonTestR
     public MonkeyTypeListRequestSender(MonkeyTypeTestMapper monkeyTypeTestMapper) {
         super(JsonTestResponseList.class, monkeyTypeTestMapper);
         this.timeService = new TimeService();
-        this.monkeyTypeTestCache = new MonkeyTypeTestCache();
+        this.monkeyTypeTestCache = new MonkeyTypeTestCache(timeService);
     }
 
     public List<MonkeyTypeTestDTO> getTestsDoneToday() {
