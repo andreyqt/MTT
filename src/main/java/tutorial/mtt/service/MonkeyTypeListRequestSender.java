@@ -22,10 +22,14 @@ public class MonkeyTypeListRequestSender extends AbstractRequestSender<JsonTestR
     private String getTestsUrl;
     private final TimeService timeService;
     private final MonkeyTypeTestCache monkeyTypeTestCache;
+    private final DailyResultCache dailyResultCache;
 
-    public MonkeyTypeListRequestSender(MonkeyTypeTestMapper monkeyTypeTestMapper) {
+    public MonkeyTypeListRequestSender(MonkeyTypeTestMapper monkeyTypeTestMapper,
+                                       DailyResultCache dailyResultCache,
+                                       TimeService timeService) {
         super(JsonTestResponseList.class, monkeyTypeTestMapper);
-        this.timeService = new TimeService();
+        this.dailyResultCache = dailyResultCache;
+        this.timeService = timeService;
         this.monkeyTypeTestCache = new MonkeyTypeTestCache(timeService);
     }
 
@@ -39,7 +43,9 @@ public class MonkeyTypeListRequestSender extends AbstractRequestSender<JsonTestR
 
     public DailyResult getTodayAverage() {
         List<MonkeyTypeTestDTO> result = getTestsDoneToday();
-        return calculateAverage(result, LocalDate.now());
+        DailyResult dailyResult = calculateAverage(result, LocalDate.now());
+        dailyResultCache.setToday(dailyResult);
+        return dailyResult;
     }
 
     public List<MonkeyTypeTestDTO> getTestsDoneYesterday() {

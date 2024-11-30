@@ -5,7 +5,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import tutorial.mtt.dto.DailyResult;
 import tutorial.mtt.entity.MonkeyTypeTest;
+import tutorial.mtt.service.DailyResultCache;
+import tutorial.mtt.service.DailyResultExcelService;
 import tutorial.mtt.service.MTTExcelService;
 import tutorial.mtt.service.MonkeyTypeTestCache;
 
@@ -19,6 +22,8 @@ public class MonkeyTypeCacheController {
 
     private final MonkeyTypeTestCache monkeyTypeTestCache;
     private final MTTExcelService excelService;
+    private final DailyResultExcelService dailyResultExcelService;
+    private final DailyResultCache dailyResultCache;
 
     @GetMapping("/size")
     public int getSize() {
@@ -40,6 +45,13 @@ public class MonkeyTypeCacheController {
         List<MonkeyTypeTest> tests = monkeyTypeTestCache.getAllFromCache();
         excelService.save(tests);
         return "tests from cache were saved successfully";
+    }
+
+    @PostMapping("/daily")
+    public String saveAverageResult() throws IOException {
+        DailyResult result = dailyResultCache.getToday();
+        dailyResultExcelService.save(result);
+        return "daily result was saved successfully";
     }
 
 }

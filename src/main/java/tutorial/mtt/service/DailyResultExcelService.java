@@ -23,8 +23,11 @@ public class DailyResultExcelService extends AbstractExcelService<DailyResult> {
 
     @Override
     protected Sheet createSheetAndHeader(Workbook workbook, String name) {
-        Sheet sheet = workbook.getSheet(name);
+        Sheet sheet = workbook.createSheet(name);
         sheet.setColumnWidth(0, 4000);
+        sheet.setColumnWidth(1, 4000);
+        sheet.setColumnWidth(2, 3500);
+        sheet.setColumnWidth(3, 4000);
         Row row = sheet.createRow(0);
         row.createCell(0).setCellValue("Date");
         row.createCell(1).setCellValue("Average speed");
