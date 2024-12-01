@@ -61,7 +61,7 @@ public abstract class AbstractExcelService<T> {
             Row row = sheet.createRow(rowIndex + 1);
             writeToRow(row, t);
             writeWorkbookToFile(wb);
-            log.error("Daily result was added to sheet {}", getSheetName());
+            log.info("Daily result was added to sheet {}", getSheetName());
         }
     }
 
