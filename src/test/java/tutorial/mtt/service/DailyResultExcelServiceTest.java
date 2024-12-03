@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tutorial.mtt.dto.DailyResult;
-import tutorial.mtt.entity.MonkeyTypeTest;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -29,6 +28,8 @@ public class DailyResultExcelServiceTest {
                 .averageSpeed(95.01)
                 .date(LocalDate.of(2010, 1,1))
                 .numberOfTests(100)
+                .averageAcc(97.01)
+                .totalTime(23.05)
                 .build();
     }
 
@@ -44,5 +45,6 @@ public class DailyResultExcelServiceTest {
         Assertions.assertEquals(result.getAverageSpeed(), actualResult.getAverageSpeed());
         Assertions.assertEquals(result.getNumberOfTests(), actualResult.getNumberOfTests());
         Assertions.assertEquals(result.getTotalTime(), actualResult.getTotalTime());
+        Assertions.assertEquals(result.getAverageAcc(), actualResult.getAverageAcc());
     }
 }

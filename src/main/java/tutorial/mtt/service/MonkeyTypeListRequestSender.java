@@ -10,6 +10,7 @@ import tutorial.mtt.entity.JsonTestResponseList;
 import tutorial.mtt.entity.MonkeyTypeTest;
 import tutorial.mtt.mapper.MonkeyTypeTestMapper;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.OptionalDouble;
@@ -79,7 +80,9 @@ public class MonkeyTypeListRequestSender extends AbstractRequestSender<JsonTestR
         OptionalDouble optionalDouble = filteredTests.stream().mapToDouble(MonkeyTypeTestDTO::getWpm).average();
         double avgSpeed = optionalDouble.isPresent() ? optionalDouble.getAsDouble() : 0;
         double avgTime = filteredTests.stream().mapToDouble(MonkeyTypeTestDTO::getTestDuration).sum() / 60.;
-        return new DailyResult(avgSpeed, avgTime, numberOfTests, date);
+        OptionalDouble optionalAvgAcc = filteredTests.stream().mapToDouble(MonkeyTypeTestDTO::getAcc).average();
+        double avgAcc = optionalAvgAcc.isPresent() ? optionalAvgAcc.getAsDouble() : 0;
+        return new DailyResult(avgSpeed, avgTime, numberOfTests, date, avgAcc);
     }
 
     public String createUrl(long afterTimestamp) {

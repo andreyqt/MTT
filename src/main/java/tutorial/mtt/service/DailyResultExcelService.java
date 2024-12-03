@@ -28,11 +28,13 @@ public class DailyResultExcelService extends AbstractExcelService<DailyResult> {
         sheet.setColumnWidth(1, 4000);
         sheet.setColumnWidth(2, 3500);
         sheet.setColumnWidth(3, 4000);
+        sheet.setColumnWidth(4, 4000);
         Row row = sheet.createRow(0);
         row.createCell(0).setCellValue("Date");
         row.createCell(1).setCellValue("Average speed");
         row.createCell(2).setCellValue("Total time");
         row.createCell(3).setCellValue("Number of tests");
+        row.createCell(4).setCellValue("Average accuracy");
         alignToCenter(row);
         return sheet;
     }
@@ -50,6 +52,7 @@ public class DailyResultExcelService extends AbstractExcelService<DailyResult> {
         cells[1].setCellValue(result.getAverageSpeed());
         cells[2].setCellValue(result.getTotalTime());
         cells[3].setCellValue(result.getNumberOfTests());
+        cells[4].setCellValue(result.getAverageAcc());
         alignToCenter(row);
     }
 
@@ -64,6 +67,7 @@ public class DailyResultExcelService extends AbstractExcelService<DailyResult> {
         result.setTotalTime(row.getCell(2).getNumericCellValue());
         double numberTests = row.getCell(3).getNumericCellValue();
         result.setNumberOfTests((int) numberTests);
+        result.setAverageAcc(row.getCell(4).getNumericCellValue());
         return result;
     }
 
@@ -73,8 +77,8 @@ public class DailyResultExcelService extends AbstractExcelService<DailyResult> {
     }
 
     private Cell[] createCells(Row row) {
-        Cell[] cells = new Cell[4];
-        for (int i = 0; i < 4; i++) {
+        Cell[] cells = new Cell[5];
+        for (int i = 0; i < 5; i++) {
             cells[i] = row.createCell(i);
         }
         return cells;

@@ -16,4 +16,5 @@ public class DailyResult {
     private double totalTime;
     private int numberOfTests;
     private LocalDate date;
+    private Double averageAcc;
 }
