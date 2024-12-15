@@ -2,6 +2,7 @@ package tutorial.mtt.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.openxml4j.util.ZipSecureFile;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
@@ -88,6 +89,7 @@ public abstract class AbstractExcelService<T> {
     }
 
     protected Workbook getWorkbookFromFile() throws IOException {
+        ZipSecureFile.setMinInflateRatio(0);
         FileInputStream fis = new FileInputStream(path);
         Workbook wb = new XSSFWorkbook(fis);
         fis.close();
