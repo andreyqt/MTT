@@ -52,4 +52,9 @@ public class MonkeyTypeTestController {
         return monkeyTypeListRequestSender.getAverageForDate(LocalDate.parse(date));
     }
 
+    @GetMapping(value = "/today/total")
+    public Double getTodayTotalTime() {
+        return monkeyTypeListRequestSender.getTodayTotalTime();
+    }
+
 }
