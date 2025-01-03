@@ -60,12 +60,15 @@ public class MonkeyTypeListRequestSender extends AbstractRequestSender<JsonTestR
         List<MonkeyTypeTestDTO> results = tests.stream().map(monkeyTypeTestMapper::toDto)
                 .filter(dto -> dto.getDateTime().toLocalDate().isBefore(LocalDate.now())).toList();
         log.info("{} test(s) were(was) done yesterday", results.size());
+        monkeyTypeTestCache.addListToYesterdayCache(filterToQuotes(tests));
         return results;
     }
 
     public DailyResult getYesterdaysAverage() {
         List<MonkeyTypeTestDTO> result = getTestsDoneYesterday();
-        return calculateAverage(result, LocalDate.now().minusDays(1));
+        DailyResult dailyResult = calculateAverage(result, LocalDate.now().minusDays(1));
+        dailyResultCache.setYesterday(dailyResult);
+        return dailyResult;
     }
 
     public DailyResult getAverageForDate(LocalDate date) {

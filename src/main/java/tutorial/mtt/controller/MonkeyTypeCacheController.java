@@ -47,11 +47,25 @@ public class MonkeyTypeCacheController {
         return "tests from cache were saved successfully";
     }
 
+    @PostMapping("/yesterday")
+    public String saveYesterdayTestFromCacheToExcel() throws IOException {
+        List<MonkeyTypeTest> tests = monkeyTypeTestCache.getAllFromYesterdayCache();
+        excelService.save(tests);
+        return "tests from yesterday's cache were saved successfully";
+    }
+
     @PostMapping("/daily")
     public String saveAverageResult() throws IOException {
         DailyResult result = dailyResultCache.getToday();
         dailyResultExcelService.save(result);
         return "daily result was saved successfully";
+    }
+
+    @PostMapping("/daily/yesterday")
+    public String saveYesterdayAverageResult() throws IOException {
+        DailyResult result = dailyResultCache.getYesterday();
+        dailyResultExcelService.save(result);
+        return "daily result for yesterday was saved successfully";
     }
 
 }

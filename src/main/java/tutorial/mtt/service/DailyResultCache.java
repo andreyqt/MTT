@@ -11,5 +11,6 @@ import tutorial.mtt.dto.DailyResult;
 public class DailyResultCache {
 
     private DailyResult today;
+    private DailyResult yesterday;
 
 }

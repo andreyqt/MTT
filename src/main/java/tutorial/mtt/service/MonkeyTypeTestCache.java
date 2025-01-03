@@ -16,10 +16,15 @@ import java.util.TreeMap;
 public class MonkeyTypeTestCache {
 
     private static final Map<Long, MonkeyTypeTest> CACHE = new TreeMap<>();
+    private static final Map<Long, MonkeyTypeTest> YESTERDAY_CACHE = new TreeMap<>();
     private final TimeService timeService;
 
     public void addToCache(MonkeyTypeTest monkeyTypeTest) {
         CACHE.putIfAbsent(monkeyTypeTest.getTimestamp(), monkeyTypeTest);
+    }
+
+    public void addToYesterdayCache(MonkeyTypeTest monkeyTypeTest) {
+        YESTERDAY_CACHE.putIfAbsent(monkeyTypeTest.getTimestamp(), monkeyTypeTest);
     }
 
     public void addListToCache(List<MonkeyTypeTest> monkeyTypeTestList) {
@@ -29,12 +34,23 @@ public class MonkeyTypeTestCache {
         log.info("tests were added to Cache, current size is {}", CACHE.size());
     }
 
+    public void addListToYesterdayCache(List<MonkeyTypeTest> monkeyTypeTestList) {
+        for (MonkeyTypeTest monkeyTypeTest : monkeyTypeTestList) {
+            addToYesterdayCache(monkeyTypeTest);
+        }
+        log.info("tests were added to yesterday's Cache, current size is {}", YESTERDAY_CACHE.size());
+    }
+
     public MonkeyTypeTest getFromCacheByTimestamp(long timestamp) {
         return CACHE.get(timestamp);
     }
 
     public List<MonkeyTypeTest> getAllFromCache() {
         return new ArrayList<>(CACHE.values());
+    }
+
+    public List<MonkeyTypeTest> getAllFromYesterdayCache() {
+        return new ArrayList<>(YESTERDAY_CACHE.values());
     }
 
     public List<MonkeyTypeTest> getTestsDoneToday() {
