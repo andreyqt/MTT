@@ -59,7 +59,7 @@ public class DailyResultExcelService extends AbstractExcelService<DailyResult> {
     @Override
     protected DailyResult readFromRow(Row row) {
         DailyResult result = new DailyResult();
-        String date = row.getCell(0).getStringCellValue();
+        String date = row.getCell(0).getStringCellValue(); 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate localDate = LocalDate.parse(date, formatter);
         result.setDate(localDate);

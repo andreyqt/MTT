@@ -16,7 +16,7 @@ import java.util.List;
 public class MTTExcelService extends AbstractExcelService<MonkeyTypeTest> {
 
     @Setter
-    private static String path = "C:\\Users\\User\\Documents\\MTT\\tests.xlsx";
+    private static String path = "C:\\Users\\User\\Documents\\MTT\\tests1.xlsx";
     private final TimeService timeService;
 
     public MTTExcelService(TimeService timeService) {
